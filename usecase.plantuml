@@ -1,0 +1,39 @@
+@startuml Answerly
+left to right direction
+skinparam packagestyle rectangle
+actor User as u
+actor Administrator as a
+
+package Answerly{
+  usecase "Login" as UC1
+  usecase "Verification" as UC2
+  usecase "Display Error" as UC3
+  usecase "Input" as UC4
+  usecase "Q/A" as UC5
+  usecase "Document" as UC6
+  usecase "Evaluate" as UC7
+  usecase "Display List of Marks" as UC8
+  usecase "No Document Uploaded Error" as UC9
+  usecase "Check Uploaded Documents" as UC10
+  usecase "Extract Text Using OCR" as UC11
+
+  (UC1) .> (UC2) : include
+  (UC3) .> (UC1) : extend
+  (UC6) .> (UC11) : include
+  (UC9) .> (UC7) : extend
+  (UC7) .> (UC10) : include
+  (UC8) .> (UC7) : extend
+
+}
+
+u --> UC1
+u --> UC4
+u --> UC7
+
+UC2 --> a
+UC5 --> a
+UC11 --> a
+UC6 --> a
+UC7 --> a
+
+@enduml
