@@ -1,0 +1,64 @@
+@startuml Answerly Sequence UML Diagram
+actor Actor
+
+'1 ******************************'
+Actor -> "Main System": login(Uername, Password)
+activate "Main System"
+
+"Main System" -> "Database": verifyLogin(Username, Password)
+activate "Database"
+
+Alternative Login is Valid
+  "Main System" -> "Actor": Successfully Logged In
+  "Database" -> "Main System":
+  Login Valid
+else
+  "Main System" -> "Actor": Login Unsuccessful
+  "Database" -> "Main System": Login Invalid
+deactivate Main System
+
+'2********************************'
+
+Actor -> "Main System": uploadQuesAns(text)
+activate "Main System"
+
+"Main System" -> "Database": storeQuesAns(text)
+deactivate Database
+deactivate "Main System"
+
+'3********************************'
+
+Actor -> "Main System": uploadDocuments(document)
+activate "Main System"
+
+"Main System" -> "Database": storeDocuments(document)
+deactivate Database
+deactivate "Main System"
+
+'4********************************'
+
+Actor -> "Main System": getMarks()
+activate "Main System"
+
+"Main System" -> "Database": retrieveDocuments()
+activate Database
+
+Alternative If documents found
+  "Database" -> "Main System": Documents
+  "Main System" -> "OCR": recognizeText(documents)
+  activate "OCR"
+  "OCR" -> "Main System": Text
+  "Main System" -> "Machine Learning Model": evaluateAnswer(Text)
+  activate "Machine Learning Model"
+  "Machine Learning Model" -> "Main System": Marks
+  "Main System" -> "Actor": Marks
+Else
+  "Database" -> "Main System": Documents Missing
+  "Main System" -> "Actor": Documents Missing
+
+deactivate "Machine Learning Model"
+deactivate "OCR"
+deactivate "Database"
+deactivate "Main System"
+
+@enduml
